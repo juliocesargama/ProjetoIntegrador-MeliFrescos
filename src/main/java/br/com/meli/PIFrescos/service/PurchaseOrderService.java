@@ -53,6 +53,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
         // unifica ProductsCart de batches iguais, caso tenha
         purchaseOrder.setCartList(dedupProductCartList(purchaseOrder.getCartList()));
+        // TODO aqui os batchs estão "duplicados" caso comprado 2x. tentar unificar
 
         //encontrar o batch
         purchaseOrder.getCartList().forEach(productsCart -> {

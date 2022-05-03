@@ -97,7 +97,7 @@ public class PurchaseOrderServiceTest {
         productsCart2.setBatch(mockBatch2);
         productsCart2.setQuantity(9);
 
-        productsCartList = Arrays.asList(productsCart1, productsCart2);
+        productsCartList = new ArrayList<>(Arrays.asList(productsCart1, productsCart2));
 
         purchaseOrder.setId(1);
         purchaseOrder.setUser(user1);
@@ -124,7 +124,11 @@ public class PurchaseOrderServiceTest {
 
     @Test
     void shouldSavePurchaseOrderWhenUserAlreadyHasAnOrder(){
-        Mockito.when(purchaseOrderRepository.getPurchaseOpenedByUserId(any())).thenReturn(Collections.singletonList(purchaseOrder));
+        PurchaseOrder oldPurchaseOder = new PurchaseOrder();
+        List<ProductsCart> oldProductsCartList = new ArrayList<>();
+        oldProductsCartList.add(productsCart1);
+        oldPurchaseOder.setCartList(oldProductsCartList);
+        Mockito.when(purchaseOrderRepository.getPurchaseOpenedByUserId(any())).thenReturn(Collections.singletonList(oldPurchaseOder));
         Mockito.when(purchaseOrderRepository.save(purchaseOrder)).thenReturn(purchaseOrder);
         Mockito.when(batchService.findByBatchNumber(1)).thenReturn(mockBatch1);
         Mockito.when(batchService.findByBatchNumber(2)).thenReturn(mockBatch2);
