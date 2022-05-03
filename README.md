@@ -30,15 +30,7 @@ src/main/resources/PostmanCollection.json
 - Quadro Kanban com as tasks realizadas [Disponível aqui](https://github.com/juliocesargama/ProjetoIntegrador-MeliFrescos/projects/1).
 
 ### Diagramas de Classe
-
-#### Requisito 01 Homologado:
-
-![RQ01](https://user-images.githubusercontent.com/70298438/165368861-83dcc6eb-1f7c-466c-897b-34b4543ee18d.jpg)
-
-
-#### Requisito 02 Homologado:
-
-![RQ02](https://user-images.githubusercontent.com/70298438/165368890-e2602f0c-83f0-4b34-957f-ce85284a8ba1.jpg)
+![DC](https://user-images.githubusercontent.com/70298438/166481858-c235e35d-9865-4d2c-a556-cd2ab11989a9.jpg)
 
 
 ### Documentação, Referencial utilizados e Cronologia dos requisitos:
