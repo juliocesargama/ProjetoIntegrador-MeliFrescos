@@ -847,13 +847,5 @@
 				]
 			}
 		}
-	],
-	"variable": [
-		{
-			"key": "token",
-			"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJNZWxpRnJlc2NvcyIsInN1YiI6IjQiLCJpYXQiOjE2NTE1ODQzOTMsImV4cCI6MTY1MTY3MDc5M30.3OxTZJn8kTag1ivdOTaKbDy7P0TM_ADd_0Fm5efhRMY",
-			"type": "default",
-			"disabled": true
-		}
 	]
 }
