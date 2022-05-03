@@ -51,6 +51,7 @@ public class UserControllerIT {
     private String accessToken;
 
     Profile profile= new Profile();
+
     User mockedUserBUYER = new User();
     User mockedUserSUPERVISOR = new User();
     User mockedUserSELLER = new User();
@@ -61,6 +62,7 @@ public class UserControllerIT {
 
         profile.setId(1L);
         profile.setName("ADMIN");
+
         mockedUserADMIN.setId(1);
         mockedUserADMIN.setFullname("John Doe");
         mockedUserADMIN.setEmail("john@mercadolivre.com.br");
@@ -109,21 +111,33 @@ public class UserControllerIT {
     @Test
     public void ShouldGetAllUsers() throws Exception{
 
-        List<User> mockedUsers = new ArrayList<User>();
+        List<User> mockedUsers = new ArrayList<>();
+        List<UserDTO> mockedUsersDTO = new ArrayList<>();
 
         Mockito.when(userRepository.findById(any())).thenReturn(Optional.ofNullable(mockedUserADMIN));
-        mockedUsers.add(mockedUserBUYER);
-        mockedUsers.add(mockedUserSUPERVISOR);
-        mockedUsers.add(mockedUserSELLER);
+
         mockedUsers.add(mockedUserADMIN);
+        mockedUsersDTO.add(new UserDTO(mockedUserADMIN));
+        mockedUsers.add(mockedUserBUYER);
+        mockedUsersDTO.add(new UserDTO(mockedUserBUYER));
+        mockedUsers.add(mockedUserSUPERVISOR);
+        mockedUsersDTO.add(new UserDTO(mockedUserSUPERVISOR));
+        mockedUsers.add(mockedUserSELLER);
+        mockedUsersDTO.add(new UserDTO(mockedUserSELLER));
+
+        String listString = objectMapper.writeValueAsString(mockedUsers);
 
         Mockito.when(userRepository.findAll()).thenReturn(mockedUsers);
 
-        mockMvc.perform(get("/fresh-products/users")
+        MvcResult mvcResult = mockMvc.perform(get("/fresh-products/users")
                 .header("Authorization",  accessToken))
                 .andExpect(status().isOk()).andReturn();
-    }
 
+        TypeReference<List<UserDTO>> typeReference = new TypeReference<List<UserDTO>>(){};
+        List<UserDTO> usersResponse = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),typeReference);
+
+        assertEquals(mockedUsersDTO,usersResponse);
+    }
 
     /**
      * Teste de Integração para cadastrar um novo usuário a partir do endpoint
