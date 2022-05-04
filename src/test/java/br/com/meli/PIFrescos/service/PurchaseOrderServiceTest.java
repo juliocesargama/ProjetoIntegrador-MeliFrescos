@@ -71,14 +71,14 @@ public class PurchaseOrderServiceTest {
         mockBatch1 = Batch.builder()
                 .batchNumber(1)
                 .product(product1)
-                .currentQuantity(10)
+                .currentQuantity(20)
                 .unitPrice(BigDecimal.valueOf(10.0))
                 .build();
 
         mockBatch2 = Batch.builder()
                 .batchNumber(2)
                 .product(product1)
-                .currentQuantity(10)
+                .currentQuantity(20)
                 .unitPrice(BigDecimal.valueOf(25.0))
                 .build();
 
