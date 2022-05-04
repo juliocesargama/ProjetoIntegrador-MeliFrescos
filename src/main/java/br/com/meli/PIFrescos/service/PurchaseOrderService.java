@@ -186,8 +186,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     @Transactional
     @Override
     public PurchaseOrder updateCartList(PurchaseOrder newPurchaseOrder) {
-        validProductList(newPurchaseOrder);
-        return purchaseOrderRepository.save(newPurchaseOrder);
+        return save(newPurchaseOrder);
     }
 
     @Override
