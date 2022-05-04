@@ -44,16 +44,10 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         try {
             oldPurchaseOrder = getPurchaseOrderByUserIdAndStatusIsOpened(purchaseOrder.getUser().getId());
             purchaseOrder.setId(oldPurchaseOrder.getId());
+            purchaseOrder.getCartList().addAll(oldPurchaseOrder.getCartList());
         } catch (EntityNotFoundException e) {
             System.out.println("Creating new purchaseorder");
         }
-        if (oldPurchaseOrder != null && oldPurchaseOrder.getCartList().size() > 0) {
-            oldPurchaseOrder.getCartList().stream().forEach(productsCart -> purchaseOrder.getCartList().add(productsCart));
-        }
-
-        // unifica ProductsCart de batches iguais, caso tenha
-        purchaseOrder.setCartList(dedupProductCartList(purchaseOrder.getCartList()));
-        // TODO aqui os batchs estão "duplicados" caso comprado 2x. tentar unificar
 
         //encontrar o batch
         purchaseOrder.getCartList().forEach(productsCart -> {
@@ -61,8 +55,13 @@ public class PurchaseOrderService implements IPurchaseOrderService {
             Batch batch = batchService.findByBatchNumber(batchNumber);
             productsCart.setBatch(batch);
         });
+
+        // unifica ProductsCart de batches iguais, caso tenha
+        List<ProductsCart> fixedProductsCart = dedupProductCartList(purchaseOrder.getCartList());
+        purchaseOrder.setCartList(fixedProductsCart);
         validProductList(purchaseOrder);
 
+        // PurchaseOrder fromDB = getPurchaseOrderByUserIdAndStatusIsOpened(purchaseOrder.getUser().getId());
         return purchaseOrderRepository.save(purchaseOrder);
     }
 
@@ -80,7 +79,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
         batches.forEach(batch -> {
             // pegar ProductsCart com batches iguais
-            List<ProductsCart> productsCarts = productsCartList.stream().filter(productsCart -> productsCart.getBatch() == batch)
+            List<ProductsCart> productsCarts = productsCartList.stream().filter(productsCart -> productsCart.getBatch().getBatchNumber() == batch.getBatchNumber())
                     .collect(Collectors.toList());
             // somar a quantidade
             Integer totalQuantity = productsCarts.stream().mapToInt(productCart -> productCart.getQuantity()).sum();
