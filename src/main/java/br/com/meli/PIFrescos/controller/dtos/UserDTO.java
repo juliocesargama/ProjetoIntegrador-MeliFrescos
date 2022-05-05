@@ -2,6 +2,7 @@ package br.com.meli.PIFrescos.controller.dtos;
 
 import br.com.meli.PIFrescos.models.User;
 import br.com.meli.PIFrescos.models.UserRole;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +20,14 @@ public class UserDTO {
   private Integer id;
   private String fullname;
   private String email;
-  private String password;
-  private UserRole role;
+ // private String password;
+ @JsonInclude(JsonInclude.Include.NON_NULL)
+ private UserRole role;
 
   public UserDTO(User user) {
     this.id = user.getId();
     this.fullname = user.getFullname();
-    this.password = user.getPassword();
+    //this.password = user.getPassword();
     this.email = user.getEmail();
     this.role = user.getRole();
   }
