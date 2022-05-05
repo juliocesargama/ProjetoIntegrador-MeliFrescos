@@ -1,5 +1,6 @@
 package br.com.meli.PIFrescos.controller.dtos;
 
+import br.com.meli.PIFrescos.models.Profile;
 import br.com.meli.PIFrescos.models.User;
 import br.com.meli.PIFrescos.models.UserRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,14 +23,14 @@ public class UserDTO {
   private String email;
  // private String password;
  @JsonInclude(JsonInclude.Include.NON_NULL)
- private UserRole role;
+ private List<String> profiles;
 
   public UserDTO(User user) {
     this.id = user.getId();
     this.fullname = user.getFullname();
     //this.password = user.getPassword();
     this.email = user.getEmail();
-    this.role = user.getRole();
+    this.profiles = user.getProfiles().stream().map(profile -> profile.getName()).collect(Collectors.toList());
   }
 
   public static List<UserDTO> convertList(List<User> users){
