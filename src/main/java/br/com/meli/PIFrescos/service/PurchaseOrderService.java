@@ -50,11 +50,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         }
 
         //encontrar o batch
-        purchaseOrder.getCartList().forEach(productsCart -> {
-            Integer batchNumber = productsCart.getBatch().getBatchNumber();
-            Batch batch = batchService.findByBatchNumber(batchNumber);
-            productsCart.setBatch(batch);
-        });
+        purchaseOrder = findPurchaseOrderCartListBatch(purchaseOrder);
 
         // unifica ProductsCart de batches iguais, caso tenha
         List<ProductsCart> fixedProductsCart = dedupProductCartList(purchaseOrder.getCartList());
@@ -63,6 +59,20 @@ public class PurchaseOrderService implements IPurchaseOrderService {
 
         // PurchaseOrder fromDB = getPurchaseOrderByUserIdAndStatusIsOpened(purchaseOrder.getUser().getId());
         return purchaseOrderRepository.save(purchaseOrder);
+    }
+
+    /**
+     * Método para encontrar o batch inserido e atualizar os valores em CartList.
+     * @param purchaseOrder
+     * @return purchaseOrder
+     */
+    private PurchaseOrder findPurchaseOrderCartListBatch(PurchaseOrder purchaseOrder) {
+        purchaseOrder.getCartList().forEach(productsCart -> {
+            Integer batchNumber = productsCart.getBatch().getBatchNumber();
+            Batch batch = batchService.findByBatchNumber(batchNumber);
+            productsCart.setBatch(batch);
+        });
+        return purchaseOrder;
     }
 
     /**
