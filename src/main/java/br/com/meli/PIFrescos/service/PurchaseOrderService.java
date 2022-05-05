@@ -123,7 +123,7 @@ public class PurchaseOrderService implements IPurchaseOrderService {
         Batch batch = batchService.findByBatchNumber(productsCart.getBatch().getBatchNumber());
         Integer batchCurrentQuantity = batch.getCurrentQuantity();
 
-        boolean isValid = batchCurrentQuantity.compareTo(productCartQuantity) > 0;
+        boolean isValid = batchCurrentQuantity.compareTo(productCartQuantity) >= 0;
         if(!isValid)
             productsCart.setBatch(batch);
 
