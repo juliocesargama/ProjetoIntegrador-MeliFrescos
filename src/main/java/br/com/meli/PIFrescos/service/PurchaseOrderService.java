@@ -233,7 +233,17 @@ public class PurchaseOrderService implements IPurchaseOrderService {
     @Transactional
     @Override
     public PurchaseOrder updateCartList(PurchaseOrder newPurchaseOrder) {
-        return save(newPurchaseOrder);
+        PurchaseOrder old = getPurchaseOrderByUserIdAndStatusIsOpened(newPurchaseOrder.getUser().getId());
+        newPurchaseOrder.setId(old.getId());
+        //encontrar o batch
+        newPurchaseOrder = findPurchaseOrderCartListBatch(newPurchaseOrder);
+
+        // unifica ProductsCart de batches iguais, caso tenha
+        List<ProductsCart> fixedProductsCart = dedupProductCartList(newPurchaseOrder.getCartList());
+        newPurchaseOrder.setCartList(fixedProductsCart);
+        validProductList(newPurchaseOrder);
+
+        return purchaseOrderRepository.save(newPurchaseOrder);
     }
 
     @Override
