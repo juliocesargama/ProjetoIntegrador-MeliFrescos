@@ -1,6 +1,8 @@
 package br.com.meli.PIFrescos.config;
 
 import br.com.meli.PIFrescos.config.handler.ProductCartException;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -66,6 +68,41 @@ public class ExceptionsHandlerController {
     @ExceptionHandler(ProductCartException.class)
     public ResponseEntity<List<ErrorFormsDto>> handleProductError(ProductCartException ex, HttpServletRequest request) {
         return new ResponseEntity<>(ex.getErrorFormsDtoList(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ExceptionDTO> handleProductError(RuntimeException ex, HttpServletRequest request) {
+        ExceptionDTO exceptionDTO = ExceptionDTO.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MPApiException.class)
+    public ResponseEntity<ExceptionDTO> handleProductError(MPApiException ex, HttpServletRequest request) {
+
+        ExceptionDTO exceptionDTO = ExceptionDTO.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getApiResponse().getContent())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MPException.class)
+    public ResponseEntity<ExceptionDTO> handleProductError(MPException ex, HttpServletRequest request) {
+
+        ExceptionDTO exceptionDTO = ExceptionDTO.builder()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(exceptionDTO, HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)

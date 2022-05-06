@@ -48,6 +48,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/auth").permitAll()
 			//InBoundOrderController
+			.antMatchers( "/fresh-products/process_payment").permitAll()
+			.antMatchers( "/fresh-products/process_payment/*").permitAll()
 			.antMatchers(HttpMethod.POST, "/fresh-products/users").permitAll()
 			.antMatchers( "/fresh-products/inboundorder").hasAnyAuthority("SUPERVISOR", "ADMIN")
 			.antMatchers( "/fresh-products/inboundorder/*").hasAnyAuthority("SUPERVISOR", "ADMIN")
@@ -61,6 +63,11 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 			//Warehouse
 			.antMatchers("/fresh-products/warehouse").hasAnyAuthority("SUPERVISOR", "ADMIN")
 			.antMatchers("/fresh-products/warehouse/*").hasAnyAuthority("SUPERVISOR", "ADMIN")
+			//Mercado pago
+			.antMatchers("/mercado-pago/credit-card").hasAnyAuthority("BUYER")
+			.antMatchers("/mercado-pago/credit-card/*").hasAnyAuthority("BUYER")
+			.antMatchers("/mercado-pago/users").hasAnyAuthority("ADMIN")
+			.antMatchers("/mercado-pago/users/*").hasAnyAuthority("ADMIN")
 
 
 		.anyRequest().authenticated()
@@ -70,11 +77,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	public void configure(WebSecurity web) throws Exception {
-//		web.ignoring().antMatchers(HttpMethod.POST, "/auth");
-//		web.ignoring().antMatchers(HttpMethod.POST, "/fresh-products/users");
-//		web.ignoring().antMatchers(HttpMethod.GET, "/fresh-products/users");
-	}
+	public void configure(WebSecurity web) throws Exception { }
 
 	public static void main(String [] args){
 		System.out.println(new BCryptPasswordEncoder().encode("123456"));

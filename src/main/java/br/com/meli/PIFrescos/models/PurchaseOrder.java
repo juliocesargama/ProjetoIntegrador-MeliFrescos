@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,5 +36,13 @@ public class PurchaseOrder {
     public PurchaseOrder(User user, List<ProductsCart> cartList) {
         this.user = user;
         this.cartList = cartList;
+    }
+
+    public BigDecimal getTotalPrice(){
+        double totalPrice = getCartList()
+                .stream().mapToDouble(productsCart ->  productsCart.getBatch().getUnitPrice().doubleValue() * productsCart.getQuantity()
+                ).sum();
+
+        return BigDecimal.valueOf(totalPrice);
     }
 }
